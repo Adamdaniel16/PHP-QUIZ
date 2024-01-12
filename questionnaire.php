@@ -9,11 +9,6 @@
     include 'functions.php';
     $q = get_questions(); // récupérer les questions
 
-    // foreach($q as $unequestion){
-    //     echo "<p>".$unequestion['textq']."</p>";
-        
-    // }
-
     if ($_SERVER["REQUEST_METHOD"] == "GET") {
         echo "<form method='POST' action='questionnaire.php'><ol>";
         foreach ($q as $quest) {
@@ -32,6 +27,9 @@
         }
         echo "Réponses correctes: " . $question_correct . "/" . $question_total . "<br>";
         echo "Votre score: " . $score_correct . "/" . $score_total . "<br>";
+        echo "<form action='home.php' method='post'>
+                <button type='submit'>Go to Homepage</button>
+            </form>";
     }
     ?>
     </body>

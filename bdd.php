@@ -17,7 +17,13 @@ try{
     idc VARCHAR(42) PRIMARY KEY,
     nameq VARCHAR(42),
     textc VARCHAR(42),
-    FOREIGN KEY(nameq) REFERENCES question(idq))");
+    FOREIGN KEY(nameq) REFERENCES question(nameq))");
+    // table answers
+    $file_db->exec("CREATE TABLE IF NOT EXISTS answers(
+        ida VARCHAR(42) PRIMARY KEY,
+        nameq VARCHAR(42),
+        texta VARCHAR(42),
+        FOREIGN KEY(nameq) REFERENCES question(nameq))");
 
     // insertion questions
     $questions=array(
@@ -27,13 +33,13 @@ try{
             'textq' => 'Citez le chiffre de pi',
             'answer' => '3.142',
             'score' => 1),
-        // array(
-        //     'nameq' => 'couleurs',
-        //     'typeq' => 'checkbox',
-        //     'textq' => 'Qeul(les) sont le(s) couleur(s) primaire(s) ?',
-        //     'answer' => array('Bleu','Rouge','Jaune'),
-        //     'score' => 1,
-        //     'choices' => array('Vert','Blanc','Bleu','Rouge','Noir','Jaune')),
+        array(
+            'nameq' => 'couleurs',
+            'typeq' => 'checkbox',
+            'textq' => 'Qeul(les) sont le(s) couleur(s) primaire(s) ?',
+            'answer' => array('Bleu','Rouge','Jaune'),
+            'score' => 1,
+            'choices' => array('Vert','Blanc','Bleu','Rouge','Noir','Jaune')),
         array(
             'nameq' => 'or',
             'typeq' => 'radio',
@@ -49,6 +55,9 @@ try{
     $insertc = "INSERT INTO choices(idc, nameq, textc) VALUES (:idc, :nameq, :textc)";
     $stmtc = $file_db->prepare($insertc);
 
+    $inserta = "INSERT INTO answers(ida, nameq, texta) VALUES (:ida, :nameq, :texta)";
+    $stmta = $file_db->prepare($inserta);
+
     // on lie les param aux var
     $stmtq->bindParam(':nameq', $nameq);
     $stmtq->bindParam(':typeq', $typeq);
@@ -60,21 +69,36 @@ try{
     $stmtc->bindParam(':nameq', $nameq);
     $stmtc->bindParam(':textc', $textc);
 
+    $stmta->bindParam(':ida', $ida);
+    $stmta->bindParam(':nameq', $nameq);
+    $stmta->bindParam(':texta', $texta);
+
+
     foreach($questions as $q){
         $nameq=$q['nameq'];
         $typeq=$q['typeq'];
         $textq=$q['textq'];
-        $answer=$q['answer'];
+        $answer=!is_array($q['answer']) ? $q['answer'] : null;
         $score=$q['score'];
         $stmtq->execute();
         if(isset($q['choices'])){
             $i = 0;
             foreach($q['choices'] as $c){
                 $i += 1;
-                $idc=$q['nameq'] . $i;
+                $idc=$q['nameq'] . 'C' . $i;
                 $nameq=$q['nameq'];
                 $textc=$c;
                 $stmtc->execute();
+            }
+        }
+        if(is_array($q['answer'])){
+            $i = 0;
+            foreach($q['answer'] as $a){
+                $i += 1;
+                $ida=$q['nameq'] . 'A' . $i;
+                $nameq=$q['nameq'];
+                $texta=$a;
+                $stmta->execute();
             }
         }
     }
@@ -86,7 +110,7 @@ try{
     //     echo "<li>".$cpt.$r['textq']."</li>";
     // }
 
-    // echo "Insertion en base réussie !";
+    echo "Insertion en base réussie !";
 
     $file_db=null;
 

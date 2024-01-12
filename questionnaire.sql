@@ -9,4 +9,10 @@ CREATE TABLE IF NOT EXISTS choices(
             idc VARCHAR(42) PRIMARY KEY,
             nameq VARCHAR(42),
             textc VARCHAR(42),
-            FOREIGN KEY(nameq) REFERENCES question(idq));
+            FOREIGN KEY(nameq) REFERENCES question(nameq));
+
+CREATE TABLE IF NOT EXISTS answers(
+            ida VARCHAR(42) PRIMARY KEY,
+            nameq VARCHAR(42),
+            texta VARCHAR(42),
+            FOREIGN KEY(nameq) REFERENCES question(nameq));

@@ -16,6 +16,18 @@ function get_choices($q){
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
+function get_answers($q){
+    $file_db = new PDO('sqlite:questionnaire.sqlite3');
+    $file_db->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_WARNING);
+    $requete = 'SELECT texta FROM answers WHERE nameq=:nameq';
+    $stmt = $file_db->prepare($requete);
+    $stmt->bindParam(':nameq', $q['nameq']);
+    $stmt->execute();
+    $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $ans = array_column($res, 'texta');
+    return $ans;
+}
+
 function question_text($q) {
     echo ($q["textq"] . "<br><input type='text' name='$q[nameq]'><br>");
 }
@@ -54,10 +66,10 @@ function answer_radio($q, $v) {
 function question_checkbox($q) {
     $html = $q["textq"] . "<br>";
     $i = 0;
-    foreach ($q["choices"] as $c) {
+    foreach (get_choices($q) as $c) {
         $i += 1;
-        $html .= "<input type='checkbox' name='$q[nameq][]' value='$c' id='$q[nameq]-$i'>";
-        $html .= "<label for='$q[nameq]-$i'>$c</label>";
+        $html .= "<input type='checkbox' name='$q[nameq][]' value='$c[textc]' id='$q[nameq]-$i'>";
+        $html .= "<label for='$q[nameq]-$i'>$c[textc]</label>";
     }
     echo $html;
 }
@@ -66,8 +78,8 @@ function answer_checkbox($q, $v) {
     global $question_correct, $score_total, $score_correct;
     $score_total += $q["score"];
     if (is_null($v)) return;
-    $diff1 = array_diff($q["answer"], $v);
-    $diff2 = array_diff($v, $q["answer"]);
+    $diff1 = array_diff(get_answers($q), $v);
+    $diff2 = array_diff($v, get_answers($q));
     if (count($diff1) == 0 && count($diff2) == 0) {
         $question_correct += 1;
         $score_correct += $q["score"];
