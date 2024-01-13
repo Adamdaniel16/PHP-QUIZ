@@ -1,91 +1,143 @@
 <?php
-function get_questions(){
+require_once 'Classes/autoloader.php';
+use Form\Type\Question;
+use Form\Type\QuestionText;
+use Form\Type\QuestionCheckbox;
+use Form\Type\QuestionRadio;
+
+function createQuestion($q){
+    switch ($q['typeq']) {
+        case 'text':
+            return new QuestionText(
+                $q['typeq'],
+                $q['textq'],
+                $q['answer'],
+                $q['score']
+            );
+        case 'radio':
+            $q['choices'] = get_choices($q);
+            return new QuestionRadio(
+                $q['typeq'],
+                $q['textq'],
+                $q['answer'],
+                $q['score'],
+                $q['choices']
+            );
+        case 'checkbox':
+            $q['choices'] = get_choices($q);
+            $q['answer'] = get_answers($q);
+            return new QuestionCheckbox(
+                $q['typeq'],
+                $q['textq'],
+                $q['answer'],
+                $q['score'],
+                $q['choices']
+            );
+
+        default:
+            throw new InvalidArgumentException("Unsupported question type: $questionType");
+    }
+}
+
+function get_bd(){
     $file_db = new PDO('sqlite:questionnaire.sqlite3');
     $file_db->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_WARNING);
+    return $file_db;
+}
+
+function get_nb_instances(){
+    $file_db = get_bd();
     $stmt = $file_db->query('SELECT * FROM question');
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $quests = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return count($quests);
+}
+
+function get_instances(){
+    $file_db = get_bd();
+    $stmt = $file_db->query('SELECT * FROM question');
+    $quests = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $res = array();
+
+    foreach($quests as $q){
+        $res[] = createQuestion($q);
+    }
+    return $res;
 }
 
 function get_choices($q){
-    $file_db = new PDO('sqlite:questionnaire.sqlite3');
-    $file_db->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_WARNING);
-    $requete = 'SELECT * FROM choices WHERE nameq=:nameq';
+    $file_db = get_bd();
+    $requete = 'SELECT * FROM choices WHERE idq=:idq';
     $stmt = $file_db->prepare($requete);
-    $stmt->bindParam(':nameq', $q['nameq']);
+    $stmt->bindParam(':idq', $q['idq']);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
 function get_answers($q){
-    $file_db = new PDO('sqlite:questionnaire.sqlite3');
-    $file_db->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_WARNING);
-    $requete = 'SELECT texta FROM answers WHERE nameq=:nameq';
+    $file_db = get_bd();
+    $requete = 'SELECT texta FROM answers WHERE idq=:idq';
     $stmt = $file_db->prepare($requete);
-    $stmt->bindParam(':nameq', $q['nameq']);
+    $stmt->bindParam(':idq', $q['idq']);
     $stmt->execute();
     $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
     $ans = array_column($res, 'texta');
     return $ans;
 }
 
-function question_text($q) {
-    echo ($q["textq"] . "<br><input type='text' name='$q[nameq]'><br>");
-}
+function add_question($q){
+    $file_db = get_bd();
 
-function answer_text($q, $v) {
-    global $question_correct, $score_total, $score_correct;
-    $score_total += $q["score"];
-    if (is_null($v)) return;
-    if ($q["answer"] == $v) {
-        $question_correct += 1;
-        $score_correct += $q["score"];
+    $insertq = "INSERT INTO question(idq, typeq, textq, answer, score) VALUES (:idq, :typeq, :textq, :answer, :score)";
+    $stmtq = $file_db->prepare($insertq);
+
+    $insertc = "INSERT INTO choices(idc, idq, textc) VALUES (:idc, :idq, :textc)";
+    $stmtc = $file_db->prepare($insertc);
+
+    $inserta = "INSERT INTO answers(ida, idq, texta) VALUES (:ida, :idq, :texta)";
+    $stmta = $file_db->prepare($inserta);
+
+    // on lie les param aux var
+    $stmtq->bindParam(':idq', $idq);
+    $stmtq->bindParam(':typeq', $typeq);
+    $stmtq->bindParam(':textq', $textq);
+    $stmtq->bindParam(':answer', $answer);
+    $stmtq->bindParam(':score', $score);
+
+    $stmtc->bindParam(':idc', $idc);
+    $stmtc->bindParam(':idq', $idq);
+    $stmtc->bindParam(':textc', $textc);
+
+    $stmta->bindParam(':ida', $ida);
+    $stmta->bindParam(':idq', $idq);
+    $stmta->bindParam(':texta', $texta);
+
+    $idq=get_nb_instances()+1;
+    $typeq=$q->typeq;
+    $textq=$q->textq;
+    $answer=!is_array($q->answer) ? $q->answer : null;
+    $score=$q->score;
+    $stmtq->execute();
+    if($typeq=='radio' or $typeq=='checkbox'){
+        $i = 0;
+        foreach($q->choices as $c){
+            $i += 1;
+            $idc=$idq . 'C' . $i;
+            $textc=$c;
+            $stmtc->execute();
+        }
+    }
+    if($typeq=='checkbox'){
+        $i = 0;
+        foreach($q->answer as $a){
+            $i += 1;
+            $ida=$idq . 'A' . $i;
+            $texta=$a;
+            $stmta->execute();
+        }
     }
 }
 
-function question_radio($q) {
-    $html = $q["textq"] . "<br>";
-    $i = 0;
-    foreach (get_choices($q) as $c) {
-        $i += 1;
-        $html .= "<input type='radio' name='$q[nameq]' value='$c[textc]' id='$q[nameq]-$i'>";
-        $html .= "<label for='$q[nameq]-$i'>$c[textc]</label>";
-    }
-    echo $html;
-}
-
-function answer_radio($q, $v) {
-    global $question_correct, $score_total, $score_correct;
-    $score_total += $q["score"];
-    if (is_null($v)) return;
-    if ($q["answer"] == $v) {
-        $question_correct += 1;
-        $score_correct += $q["score"];
-    }
-}
-
-function question_checkbox($q) {
-    $html = $q["textq"] . "<br>";
-    $i = 0;
-    foreach (get_choices($q) as $c) {
-        $i += 1;
-        $html .= "<input type='checkbox' name='$q[nameq][]' value='$c[textc]' id='$q[nameq]-$i'>";
-        $html .= "<label for='$q[nameq]-$i'>$c[textc]</label>";
-    }
-    echo $html;
-}
-
-function answer_checkbox($q, $v) {
-    global $question_correct, $score_total, $score_correct;
-    $score_total += $q["score"];
-    if (is_null($v)) return;
-    $diff1 = array_diff(get_answers($q), $v);
-    $diff2 = array_diff($v, get_answers($q));
-    if (count($diff1) == 0 && count($diff2) == 0) {
-        $question_correct += 1;
-        $score_correct += $q["score"];
-    }
-}
-
+// AFFICHAGE DES QUESTIONS
 $question_handlers = array(
     "text" => "question_text",
     "radio" => "question_radio",
@@ -97,3 +149,65 @@ $answer_handlers = array(
     "radio" => "answer_radio",
     "checkbox" => "answer_checkbox"
 );
+
+
+
+function question_text($q, $id) {
+    echo ($q->textq . "<br><input type='text' name='$id'><br>");
+}
+
+function answer_text($q, $v) {
+    global $question_correct, $score_total, $score_correct;
+    $score_total += $q->score;
+    if (is_null($v)) return;
+    if ($q->answer == $v) {
+        $question_correct += 1;
+        $score_correct += $q->score;
+    }
+}
+
+function question_radio($q, $id) {
+    $html = $q->textq . "<br>";
+    $i = 0;
+    foreach ($q->choices as $c) {
+        $i += 1;
+        $html .= "<input type='radio' name='$id' value='$c[textc]' id='$id-$i'>";
+        $html .= "<label for='$id-$i'>$c[textc]</label>";
+    }
+    echo $html;
+}
+
+function answer_radio($q, $v) {
+    global $question_correct, $score_total, $score_correct;
+    $score_total += $q->score;
+    if (is_null($v)) return;
+    if ($q->answer == $v) {
+        $question_correct += 1;
+        $score_correct += $q->score;
+    }
+}
+
+function question_checkbox($q, $id) {
+    $html = $q->textq . "<br>";
+    $i = 0;
+    foreach ($q->choices as $c) {
+        $i += 1;
+        $html .= "<input type='checkbox' name='{$id}[]' value='$c[textc]' id='$id-$i'>";
+        $html .= "<label for='$id-$i'>$c[textc]</label>";
+    }
+    echo $html;
+}
+
+function answer_checkbox($q, $v) {
+    global $question_correct, $score_total, $score_correct;
+    $score_total += $q->score;
+    if (is_null($v)) return;
+    $diff1 = array_diff($q->answer, $v);
+    $diff2 = array_diff($v, $q->answer);
+    if (count($diff1) == 0 && count($diff2) == 0) {
+        $question_correct += 1;
+        $score_correct += $q->score;
+    }
+}
+
+?>
