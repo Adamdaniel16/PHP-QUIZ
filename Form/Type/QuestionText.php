@@ -6,9 +6,9 @@ namespace Form\Type;
 class QuestionText extends Question {
     public string $answer;
 
-    public function __construct(string $typeq, string $textq, string $answer, int $score) {
+    public function __construct(int $idq, string $typeq, string $textq, string $answer, int $score) {
         $this->answer = $answer;
-        parent::__construct($typeq, $textq, $score);
+        parent::__construct($idq, $typeq, $textq, $score);
     }
 }
 

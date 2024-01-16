@@ -9,6 +9,7 @@ function createQuestion($q){
     switch ($q['typeq']) {
         case 'text':
             return new QuestionText(
+                $q['idq'],
                 $q['typeq'],
                 $q['textq'],
                 $q['answer'],
@@ -17,6 +18,7 @@ function createQuestion($q){
         case 'radio':
             $q['choices'] = get_choices($q);
             return new QuestionRadio(
+                $q['idq'],
                 $q['typeq'],
                 $q['textq'],
                 $q['answer'],
@@ -27,6 +29,7 @@ function createQuestion($q){
             $q['choices'] = get_choices($q);
             $q['answer'] = get_answers($q);
             return new QuestionCheckbox(
+                $q['idq'],
                 $q['typeq'],
                 $q['textq'],
                 $q['answer'],
@@ -111,7 +114,7 @@ function add_question($q){
     $stmta->bindParam(':idq', $idq);
     $stmta->bindParam(':texta', $texta);
 
-    $idq=get_nb_instances()+1;
+    $idq=$q->idq;
     $typeq=$q->typeq;
     $textq=$q->textq;
     $answer=!is_array($q->answer) ? $q->answer : null;

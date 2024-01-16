@@ -15,8 +15,8 @@
         <h2>Text</h2>
         <form method='POST' action='add-question.php'>
             <?php
-                // $idq = count(get_questions()) + 1;
-                // echo "<input type='hidden' name='idq' value=$idq>";
+                $idq = get_nb_instances() + 1;
+                echo "<input type='hidden' name='idq' value=$idq>";
             ?>
             <input type='hidden' name='typeq' value='text'>
             <label for='textq'>Question</label>
@@ -32,6 +32,8 @@
         <h2>Radio</h2>
         <form method='POST' action='add-question.php'>
             <?php
+            $idq = get_nb_instances() + 1;
+            echo "<input type='hidden' name='idq' value=$idq>";
             ?>
             <input type='hidden' name='typeq' value='radio'>
             <label for='textq'>Question</label>
@@ -49,6 +51,8 @@
         <h2>Checkbox</h2>
         <form method='POST' action='add-question.php'>
             <?php
+            $idq = get_nb_instances() + 1;
+            echo "<input type='hidden' name='idq' value=$idq>";
             ?>
             <input type='hidden' name='typeq' value='checkbox'>
             <label for='textq'>Question</label>
@@ -67,16 +71,16 @@
                 $quest = $_POST;
                 switch($quest['typeq']){
                     case 'text':
-                        $objet = new QuestionText($quest['typeq'],$quest['textq'],$quest['answer'],$quest['score']);
+                        $objet = new QuestionText($quest['idq'], $quest['typeq'],$quest['textq'],$quest['answer'],$quest['score']);
                         break;
                     case 'radio':
                         $quest['choices'] = explode(';', $quest['choices']);
-                        $objet = new QuestionRadio($quest['typeq'],$quest['textq'],$quest['answer'],$quest['score'],$quest['choices']);
+                        $objet = new QuestionRadio($quest['idq'], $quest['typeq'],$quest['textq'],$quest['answer'],$quest['score'],$quest['choices']);
                         break;
                     case 'checkbox':
                         $quest['answer'] = explode(';', $quest['answer']);
                         $quest['choices'] = explode(';', $quest['choices']);
-                        $objet = new QuestionCheckbox($quest['typeq'],$quest['textq'],$quest['answer'],$quest['score'],$quest['choices']);
+                        $objet = new QuestionCheckbox($quest['idq'], $quest['typeq'],$quest['textq'],$quest['answer'],$quest['score'],$quest['choices']);
                         break;
                 }
                 add_question($objet);

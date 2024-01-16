@@ -7,10 +7,10 @@ class QuestionCheckbox extends Question {
     public array $answer;
     public array $choices;
 
-    public function __construct(string $typeq, string $textq, array $answer, int $score, array $choices) {
+    public function __construct(int $idq, string $typeq, string $textq, array $answer, int $score, array $choices) {
         $this->answer = $answer;
         $this->choices = $choices;
-        parent::__construct($typeq, $textq, $score);
+        parent::__construct($idq, $typeq, $textq, $score);
     }
 }
 

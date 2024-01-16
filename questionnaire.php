@@ -25,8 +25,7 @@
         $score_total = 0;
         $score_correct = 0;
         foreach ($q as $quest) {
-            $question_total += 1;
-            $answer_handlers[$quest->typeq]($quest, $_POST[$question_total] ?? NULL);
+            $answer_handlers[$quest->typeq]($quest, $_POST[$quest->idq] ?? NULL);
         }
         echo "Réponses correctes: " . $question_correct . "/" . $question_total . "<br>";
         echo "Votre score: " . $score_correct . "/" . $score_total . "<br>";
