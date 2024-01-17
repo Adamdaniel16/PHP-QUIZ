@@ -12,15 +12,13 @@
 
     if ($_SERVER["REQUEST_METHOD"] == "GET") {
         echo "<form method='POST' action='questionnaire.php'><ol>";
-        $id = 0;
         foreach ($q as $quest) {
             echo "<li>";
-            $id += 1;
-            $question_handlers[$quest->typeq]($quest, $id);
+            $question_handlers[$quest->typeq]($quest, $quest->idq);
         }
         echo "</ol><input type='submit' value='Envoyer'></form>";
     } else {
-        $question_total = 0;
+        $question_total = get_nb_instances();
         $question_correct = 0;
         $score_total = 0;
         $score_correct = 0;
@@ -33,7 +31,7 @@
     }
     ?>
     <form action='home.php'>
-        <button type='submit'>Go to Homepage</button>
+        <button action='home.php'>Go to Homepage</button>
     </form>
     </body>
 </html>

@@ -155,8 +155,8 @@ $answer_handlers = array(
 
 
 
-function question_text($q, $id) {
-    echo ($q->textq . "<br><input type='text' name='$id'><br>");
+function question_text($q) {
+    echo ($q->textq . "<br><input type='text' name='$q->idq'><br>");
 }
 
 function answer_text($q, $v) {
@@ -169,13 +169,13 @@ function answer_text($q, $v) {
     }
 }
 
-function question_radio($q, $id) {
+function question_radio($q) {
     $html = $q->textq . "<br>";
     $i = 0;
     foreach ($q->choices as $c) {
         $i += 1;
-        $html .= "<input type='radio' name='$id' value='$c[textc]' id='$id-$i'>";
-        $html .= "<label for='$id-$i'>$c[textc]</label>";
+        $html .= "<input type='radio' name='$q->idq' value='$c[textc]' id='$q->idq-$i'>";
+        $html .= "<label for='$q->idq-$i'>$c[textc]</label>";
     }
     echo $html;
 }
@@ -190,13 +190,13 @@ function answer_radio($q, $v) {
     }
 }
 
-function question_checkbox($q, $id) {
+function question_checkbox($q) {
     $html = $q->textq . "<br>";
     $i = 0;
     foreach ($q->choices as $c) {
         $i += 1;
-        $html .= "<input type='checkbox' name='{$id}[]' value='$c[textc]' id='$id-$i'>";
-        $html .= "<label for='$id-$i'>$c[textc]</label>";
+        $html .= "<input type='checkbox' name='{$q->idq}[]' value='$c[textc]' id='$q->idq-$i'>";
+        $html .= "<label for='$q->idq-$i'>$c[textc]</label>";
     }
     echo $html;
 }

@@ -13,10 +13,12 @@
         <h1>EDIT QUESTION</h1>
         <?php
             foreach(get_instances() as $question){
+                $idq = $question->idq;
                 $typeq = $question->typeq;
                 $textq = $question->textq;
                 $score = $question->score;
                 echo "<form method='POST' action='edit-question.php'>
+                <input type='hidden' name='idq' value='$idq'>
                 <input type='hidden' name='typeq' value='$typeq'>
                 <label for='textq'>Question</label>
                 <input type='text' name='textq' value='$textq'><br/>
@@ -47,24 +49,29 @@
                 <input type='text' name='answer' value='$answer'><br/>";
             }
         ?>
+        <input type='submit' value='Mettre à jour'>
+        </form>
         <?php
             if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $quest = $_POST;
                 switch($quest['typeq']){
                     case 'text':
-                        $objet = new QuestionText($quest['typeq'],$quest['textq'],$quest['answer'],$quest['score']);
+                        $objet = new QuestionText($quest['idq'], $quest['typeq'],$quest['textq'],$quest['answer'],$quest['score']);
                         break;
                     case 'radio':
                         $quest['choices'] = explode(';', $quest['choices']);
-                        $objet = new QuestionRadio($quest['typeq'],$quest['textq'],$quest['answer'],$quest['score'],$quest['choices']);
+                        $objet = new QuestionRadio($quest['idq'], $quest['typeq'],$quest['textq'],$quest['answer'],$quest['score'],$quest['choices']);
                         break;
                     case 'checkbox':
                         $quest['answer'] = explode(';', $quest['answer']);
                         $quest['choices'] = explode(';', $quest['choices']);
-                        $objet = new QuestionCheckbox($quest['typeq'],$quest['textq'],$quest['answer'],$quest['score'],$quest['choices']);
+                        $objet = new QuestionCheckbox($quest['idq'], $quest['typeq'],$quest['textq'],$quest['answer'],$quest['score'],$quest['choices']);
                         break;
                 }
                 add_question($objet);
             }
         ?>
+        <form action='home.php'>
+            <button action='home.php'>Go to Homepage</button>
+        </form>
     </body>

@@ -15,8 +15,8 @@
         <h2>Text</h2>
         <form method='POST' action='add-question.php'>
             <?php
-                $idq = get_nb_instances() + 1;
-                echo "<input type='hidden' name='idq' value=$idq>";
+                // $idq = get_nb_instances() + 1;
+                echo "<input type='hidden' name='idq'>";
             ?>
             <input type='hidden' name='typeq' value='text'>
             <label for='textq'>Question</label>
@@ -32,8 +32,8 @@
         <h2>Radio</h2>
         <form method='POST' action='add-question.php'>
             <?php
-            $idq = get_nb_instances() + 1;
-            echo "<input type='hidden' name='idq' value=$idq>";
+            // $idq = get_nb_instances() + 1;
+            echo "<input type='hidden' name='idq'>";
             ?>
             <input type='hidden' name='typeq' value='radio'>
             <label for='textq'>Question</label>
@@ -51,8 +51,8 @@
         <h2>Checkbox</h2>
         <form method='POST' action='add-question.php'>
             <?php
-            $idq = get_nb_instances() + 1;
-            echo "<input type='hidden' name='idq' value=$idq>";
+            // $idq = get_nb_instances() + 1;
+            echo "<input type='hidden' name='idq'>";
             ?>
             <input type='hidden' name='typeq' value='checkbox'>
             <label for='textq'>Question</label>
@@ -69,6 +69,7 @@
         <?php
             if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $quest = $_POST;
+                $quest['idq'] = get_nb_instances() + 1;
                 switch($quest['typeq']){
                     case 'text':
                         $objet = new QuestionText($quest['idq'], $quest['typeq'],$quest['textq'],$quest['answer'],$quest['score']);
@@ -86,4 +87,7 @@
                 add_question($objet);
             }
         ?>
+        <form action='home.php'>
+            <button action='home.php'>Go to Homepage</button>
+        </form>
     </body>
