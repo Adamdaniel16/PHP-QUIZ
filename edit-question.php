@@ -12,8 +12,9 @@
     <body>
         <h1>EDIT QUESTION</h1>
         <?php
-            foreach(get_instances() as $question){
-                $idq = $question->idq;
+            $idq = isset($_GET['idq']) ? $_GET['idq'] : null;
+            if($idq!==null){
+                $question = get_question_by_id($idq);
                 $typeq = $question->typeq;
                 $textq = $question->textq;
                 $score = $question->score;
@@ -46,12 +47,11 @@
                 }
 
                 echo "<label for='answer'>Answer</label>
-                <input type='text' name='answer' value='$answer'><br/>";
+                <input type='text' name='answer' value='$answer'><br/>
+                <input type='submit' value='Mettre à jour'>
+                </form>";
             }
-        ?>
-        <input type='submit' value='Mettre à jour'>
-        </form>
-        <?php
+
             if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $quest = $_POST;
                 switch($quest['typeq']){
@@ -68,10 +68,10 @@
                         $objet = new QuestionCheckbox($quest['idq'], $quest['typeq'],$quest['textq'],$quest['answer'],$quest['score'],$quest['choices']);
                         break;
                 }
-                add_question($objet);
+                edit_question($objet);
             }
         ?>
-        <form action='home.php'>
-            <button action='home.php'>Go to Homepage</button>
+        <form action='all-question.php'>
+            <button type="submit">Back</button>
         </form>
     </body>

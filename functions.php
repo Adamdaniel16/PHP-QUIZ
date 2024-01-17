@@ -38,7 +38,7 @@ function createQuestion($q){
             );
 
         default:
-            throw new InvalidArgumentException("Unsupported question type: $questionType");
+            throw new InvalidArgumentException("Unsupported question type: $q[typeq]");
     }
 }
 
@@ -138,6 +138,77 @@ function add_question($q){
             $stmta->execute();
         }
     }
+}
+
+function get_question_by_id($id){
+    $file_db = get_bd();
+    $requete = 'SELECT * FROM question WHERE idq=:idq';
+    $stmt = $file_db->query($requete);
+    $stmt = $file_db->prepare($requete);
+    $stmt->bindParam(':idq', $id);
+    $stmt->execute();
+    $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return createQuestion($res[0]);
+
+    $file_db = get_bd();
+    $requete = 'SELECT texta FROM answers WHERE idq=:idq';
+    $stmt = $file_db->prepare($requete);
+    $stmt->bindParam(':idq', $q['idq']);
+    $stmt->execute();
+    $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $ans = array_column($res, 'texta');
+    return $ans;
+}
+
+function edit_question($q){
+    $file_db = get_bd();
+
+    $updateq = "UPDATE question SET textq = :textq, answer = :answer, score = :score WHERE idq = :idq";
+    $stmtq = $file_db->prepare($updateq);
+
+    // $insertc = "UPDATE choices SET textq = :textq, answer = :answer, score = :score WHERE idq = :idq";
+    // $stmtc = $file_db->prepare($insertc);
+
+    // $inserta = "INSERT INTO answers(ida, idq, texta) VALUES (:ida, :idq, :texta)";
+    // $stmta = $file_db->prepare($inserta);
+
+    // on lie les param aux var
+    $stmtq->bindParam(':textq', $textq);
+    $stmtq->bindParam(':answer', $answer);
+    $stmtq->bindParam(':score', $score);
+    $stmtq->bindParam(':idq', $idq);
+
+    // $stmtc->bindParam(':idc', $idc);
+    // $stmtc->bindParam(':idq', $idq);
+    // $stmtc->bindParam(':textc', $textc);
+
+    // $stmta->bindParam(':ida', $ida);
+    // $stmta->bindParam(':idq', $idq);
+    // $stmta->bindParam(':texta', $texta);
+
+    $idq=$q->idq;
+    $textq=$q->textq;
+    $answer=!is_array($q->answer) ? $q->answer : null;
+    $score=$q->score;
+    $stmtq->execute();
+    // if($typeq=='radio' or $typeq=='checkbox'){
+    //     $i = 0;
+    //     foreach($q->choices as $c){
+    //         $i += 1;
+    //         $idc=$idq . 'C' . $i;
+    //         $textc=$c;
+    //         $stmtc->execute();
+    //     }
+    // }
+    // if($typeq=='checkbox'){
+    //     $i = 0;
+    //     foreach($q->answer as $a){
+    //         $i += 1;
+    //         $ida=$idq . 'A' . $i;
+    //         $texta=$a;
+    //         $stmta->execute();
+    //     }
+    // }
 }
 
 // AFFICHAGE DES QUESTIONS
