@@ -166,11 +166,11 @@ function edit_question($q){
     $updateq = "UPDATE question SET textq = :textq, answer = :answer, score = :score WHERE idq = :idq";
     $stmtq = $file_db->prepare($updateq);
 
-    // $insertc = "UPDATE choices SET textq = :textq, answer = :answer, score = :score WHERE idq = :idq";
-    // $stmtc = $file_db->prepare($insertc);
+    $insertc = "INSERT INTO choices(idc, idq, textc) VALUES (:idc, :idq, :textc)";
+    $stmtc = $file_db->prepare($insertc);
 
-    // $inserta = "INSERT INTO answers(ida, idq, texta) VALUES (:ida, :idq, :texta)";
-    // $stmta = $file_db->prepare($inserta);
+    $inserta = "INSERT INTO answers(ida, idq, texta) VALUES (:ida, :idq, :texta)";
+    $stmta = $file_db->prepare($inserta);
 
     // on lie les param aux var
     $stmtq->bindParam(':textq', $textq);
@@ -178,37 +178,42 @@ function edit_question($q){
     $stmtq->bindParam(':score', $score);
     $stmtq->bindParam(':idq', $idq);
 
-    // $stmtc->bindParam(':idc', $idc);
-    // $stmtc->bindParam(':idq', $idq);
-    // $stmtc->bindParam(':textc', $textc);
+    $stmtc->bindParam(':idc', $idc);
+    $stmtc->bindParam(':idq', $idq);
+    $stmtc->bindParam(':textc', $textc);
 
-    // $stmta->bindParam(':ida', $ida);
-    // $stmta->bindParam(':idq', $idq);
-    // $stmta->bindParam(':texta', $texta);
+    $stmta->bindParam(':ida', $ida);
+    $stmta->bindParam(':idq', $idq);
+    $stmta->bindParam(':texta', $texta);
 
     $idq=$q->idq;
     $textq=$q->textq;
     $answer=!is_array($q->answer) ? $q->answer : null;
     $score=$q->score;
     $stmtq->execute();
-    // if($typeq=='radio' or $typeq=='checkbox'){
-    //     $i = 0;
-    //     foreach($q->choices as $c){
-    //         $i += 1;
-    //         $idc=$idq . 'C' . $i;
-    //         $textc=$c;
-    //         $stmtc->execute();
-    //     }
-    // }
-    // if($typeq=='checkbox'){
-    //     $i = 0;
-    //     foreach($q->answer as $a){
-    //         $i += 1;
-    //         $ida=$idq . 'A' . $i;
-    //         $texta=$a;
-    //         $stmta->execute();
-    //     }
-    // }
+    $typeq=$q->typeq;
+    if($typeq=='radio' or $typeq=='checkbox'){
+        $deletec = "DELETE FROM choices WHERE idq = $idq";
+        $file_db->exec($deletec);
+        $i = 0;
+        foreach($q->choices as $c){
+            $i += 1;
+            $idc=$idq . 'C' . $i;
+            $textc=$c;
+            $stmtc->execute();
+        }
+    }
+    if($typeq=='checkbox'){
+        $deletea = "DELETE FROM answers WHERE idq = $idq";
+        $file_db->exec($deletea);
+        $i = 0;
+        foreach($q->answer as $a){
+            $i += 1;
+            $ida=$idq . 'A' . $i;
+            $texta=$a;
+            $stmta->execute();
+        }
+    }
 }
 
 // AFFICHAGE DES QUESTIONS
