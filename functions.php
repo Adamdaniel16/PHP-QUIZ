@@ -216,6 +216,26 @@ function edit_question($q){
     }
 }
 
+function delete_question_by_id($idq){
+    $file_db = get_bd();
+
+    $reqtypeq = "SELECT typeq FROM question WHERE idq = $idq";
+    $typeq = $file_db->exec($reqtypeq);
+    
+    $deleteq = "DELETE FROM question WHERE idq = $idq";
+    $file_db->exec($deleteq);
+
+    if($typeq == "radio" or $typeq == "checkbox"){
+        $deletec = "DELETE FROM choices WHERE idq = $idq";
+        $file_db->exec($deletec);
+    }
+
+    if($typeq == "radio" or $typeq == "checkbox"){
+        $deletea = "DELETE FROM answers WHERE idq = $idq";
+    $file_db->exec($deletea);
+    }
+}
+
 // AFFICHAGE DES QUESTIONS
 $question_handlers = array(
     "text" => "question_text",
