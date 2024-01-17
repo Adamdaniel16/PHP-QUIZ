@@ -22,7 +22,7 @@
                 <input type='hidden' name='idq' value='$idq'>
                 <input type='hidden' name='typeq' value='$typeq'>
                 <label for='textq'>Question</label>
-                <input type='text' name='textq' value='$textq'><br/>
+                <input type='text' name='textq' value=\"$textq\"><br/>
                 <label for='score'>Score</label>
                 <input type='number' name='score' min='0' value='$score'><br/>";
 
@@ -69,9 +69,7 @@
                         break;
                 }
                 edit_question($objet);
+                header("Location: all-question.php");
             }
         ?>
-        <form action='all-question.php'>
-            <button type="submit">Back</button>
-        </form>
     </body>

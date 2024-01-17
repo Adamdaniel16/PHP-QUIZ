@@ -50,14 +50,12 @@
                         break;
                 }
 
-                // echo "<td>$answer</td>
-                // <td><a>editer</a></td>
-                // <td><a>supprimer</a></td>
-                // </tr>";
-
                 echo "<td>$answer</td>
-            <td><a href='edit-question.php?idq=$idq'>editer</a></td>
-        </tr>";
+                <td><a href='edit-question.php?idq=$idq'>editer</a></td>
+                <td><a href='delete-question.php?idq=$idq' onclick='return confirm(\"Are you sure you want to delete this question?\")'>supprimer</a></td>
+                </tr>";
+
+                // <td><a href='delete-question.php?idq=$idq' onclick='return confirm(\"Are you sure you want to delete this question?\")>supprimer</a></td>
             }
         ?>
         <form action='home.php'>
