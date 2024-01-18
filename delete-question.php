@@ -6,6 +6,8 @@ use Form\Type\QuestionText;
 use Form\Type\QuestionCheckbox;
 use Form\Type\QuestionRadio;
 
+// suppression d'une question
+
 if (isset($_GET['idq'])) {
     $idq = $_GET['idq'];
     delete_question_by_id($idq);
