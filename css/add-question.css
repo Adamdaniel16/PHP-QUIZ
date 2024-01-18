@@ -1,6 +1,6 @@
 li{
     list-style-type: none;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
     flex-grow: 1;
     text-align: center;
 }
@@ -26,11 +26,7 @@ div{
     color: #F3EEEA;
 }
 
-button, input{
-    background-color: #776B5D;
-    color: #EBE3D5;
-    font-size: 25px;
-}
+
 
 div *{
     font-size: 20px;
