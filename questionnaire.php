@@ -32,9 +32,9 @@
         foreach ($q as $quest) {
             $answer_handlers[$quest->typeq]($quest, $_POST[$quest->idq] ?? NULL);
         }
-        echo "Réponses correctes: " . $question_correct . "/" . $question_total . "<br>";
-        echo "Votre score: " . $score_correct . "/" . $score_total . "<br>";
-        echo "Votre score: " . round($score_correct/$score_total*100, 2) . "%<br>";
+        echo "<p>Réponses correctes: " . $question_correct . "/" . $question_total . "</p><br>";
+        echo "<p>Votre score: " . $score_correct . "/" . $score_total . "</p><br>";
+        echo "<p>Votre score: " . round($score_correct/$score_total*100, 2) . "%</p><br>";
     }
     ?>
     <form action='home.php'>
