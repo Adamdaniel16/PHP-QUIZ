@@ -1,5 +1,9 @@
 <html>
-    <head></head>
+    <head>
+        <title>Questionnaire</title>
+        <link rel="stylesheet" href="css/questionnaire.css">
+        <link rel="stylesheet" href="css/base.css">
+    </head>
     <body>
     <h1>QUIZ</h1>
     <?php
