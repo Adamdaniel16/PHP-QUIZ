@@ -3,6 +3,9 @@
         <title>Questionnaire</title>
         <link rel="stylesheet" href="css/questionnaire.css">
         <link rel="stylesheet" href="css/base.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Questrial&display=swap" rel="stylesheet"> 
     </head>
     <body>
     <h1>QUIZ</h1>
