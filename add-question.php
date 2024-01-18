@@ -33,6 +33,7 @@
             <li><a href="#" onclick="showForm('checkbox')"><button>Checkbox</button></a></li>
         </ul>
 
+        <!-- Formulaire Text -->
         <div id="text-form" class="question-form">
             <h2>Text</h2>
             <form method='POST' action='add-question.php'>
@@ -52,6 +53,7 @@
             </form>
         </div>
 
+        <!-- Formulaire Radio button -->
         <div id="radio-form" class="question-form">
             <h2>Radio</h2>
             <form method='POST' action='add-question.php'>
@@ -73,6 +75,7 @@
             </form>
         </div>
         
+        <!-- Formulaire Checkbox -->
         <div id="checkbox-form" class="question-form">
             <h2>Checkbox</h2>
             <form method='POST' action='add-question.php'>
@@ -107,6 +110,7 @@
             }
         </script>
         <?php
+            // ajout de la question
             if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $quest = $_POST;
                 $quest['idq'] = get_nb_instances() + 1;

@@ -1,5 +1,6 @@
 h1{
     font-size: 40px;
+    margin-left: 1em;
 }
 
 h2{
@@ -10,4 +11,20 @@ body{
     background: #EBE3D5;
     color: #776B5D;
     font-family: 'Questrial', sans-serif;
+}
+
+button, input{
+    background-color: #776B5D;
+    color: #EBE3D5;
+    font-size: 25px;
+}
+
+button:hover{
+    cursor:pointer;
+}
+
+form, li{
+    margin-bottom: 5em;
+    margin-top: 5em;
+    margin-left: 1em;
 }

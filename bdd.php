@@ -37,7 +37,7 @@ try{
     // insertion questions
     $questions=array(
         new QuestionText(1, 'text','Citez le chiffre de pi','3.142',1),
-        new QuestionCheckbox(2, 'checkbox','Qeul(les) sont le(s) couleur(s) primaire(s) ?',array('Bleu','Rouge','Jaune'),1,array('Vert','Blanc','Bleu','Rouge','Noir','Jaune')),
+        new QuestionCheckbox(2, 'checkbox','Quelles sont les couleurs primaires ?',array('Bleu','Rouge','Jaune'),1,array('Vert','Blanc','Bleu','Rouge','Noir','Jaune')),
         new QuestionRadio(3, 'radio',"Quel est le symbole chimique de l'or ?",'Au',1,array('H2O','Gd','Au','Or')),
     );
 
