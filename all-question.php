@@ -8,6 +8,9 @@
             use Form\Type\QuestionCheckbox;
             use Form\Type\QuestionRadio;
         ?>
+            <title>All Question</title>
+            <link rel="stylesheet" href="css/all-question.css">
+            <link rel="stylesheet" href="css/base.css">
     </head>
     <body>
         <h1>EDIT A QUESTION</h1>

@@ -8,64 +8,104 @@
             use Form\Type\QuestionCheckbox;
             use Form\Type\QuestionRadio;
         ?>
+        <title>Add Question</title>
+        <link rel="stylesheet" href="css/add-question.css">
+        <link rel="stylesheet" href="css/base.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Questrial&display=swap" rel="stylesheet"> 
+        <style>
+            .question-form {
+                display: none;
+            }
+
+            .question-form.active {
+                display: block;
+            }
+        </style>
     </head>
     <body>
         <h1>ADD QUESTION</h1>
 
-        <h2>Text</h2>
-        <form method='POST' action='add-question.php'>
-            <?php
+        <ul>
+            <li><a href="#" onclick="showForm('text')"><button>Text</button></a></li>
+            <li><a href="#" onclick="showForm('radio')"><button>Radio</button></a></li>
+            <li><a href="#" onclick="showForm('checkbox')"><button>Checkbox</button></a></li>
+        </ul>
+
+        <div id="text-form" class="question-form">
+            <h2>Text</h2>
+            <form method='POST' action='add-question.php'>
+                <?php
+                    // $idq = get_nb_instances() + 1;
+                    echo "<input type='hidden' name='idq'>";
+                ?>
+                <input type='hidden' name='typeq' value='text'>
+                <label for='textq'>Question</label>
+                <input type='text' name='textq'><br/>
+                <label for='answer'>Answer</label>
+                <input type='text' name='answer'><br/>
+                <label for='score'>Score</label>
+                <input type='number' name='score' min="0" value="1" id='no'><br/>
+
+                <input type='submit' value='Ajouter' id='no'>
+            </form>
+        </div>
+
+        <div id="radio-form" class="question-form">
+            <h2>Radio</h2>
+            <form method='POST' action='add-question.php'>
+                <?php
                 // $idq = get_nb_instances() + 1;
                 echo "<input type='hidden' name='idq'>";
-            ?>
-            <input type='hidden' name='typeq' value='text'>
-            <label for='textq'>Question</label>
-            <input type='text' name='textq'><br/>
-            <label for='answer'>Answer</label>
-            <input type='text' name='answer'><br/>
-            <label for='score'>Score</label>
-            <input type='number' name='score' min="0" value="1"><br/>
+                ?>
+                <input type='hidden' name='typeq' value='radio'>
+                <label for='textq'>Question</label>
+                <input type='text' name='textq'><br/>
+                <label for='answer'>Answer</label>
+                <input type='text' name='answer'><br/>
+                <label for='score'>Score</label>
+                <input type='number' name='score' min="0" value="1" id='no'><br/>
+                <label for='score'>Choices</label>
+                <input type='text' name='choices'><br/>
 
-            <input type='submit' value='Ajouter'>
-        </form>
+                <input type='submit' value='Ajouter' id='no'>
+            </form>
+        </div>
+        
+        <div id="checkbox-form" class="question-form">
+            <h2>Checkbox</h2>
+            <form method='POST' action='add-question.php'>
+                <?php
+                // $idq = get_nb_instances() + 1;
+                echo "<input type='hidden' name='idq'>";
+                ?>
+                <input type='hidden' name='typeq' value='checkbox'>
+                <label for='textq'>Question</label>
+                <input type='text' name='textq'><br/>
+                <label for='answer'>Answer</label>
+                <input type='text' name='answer'><br/>
+                <label for='score'>Score</label>
+                <input type='number' name='score' min="0" value="1" id='no'><br/>
+                <label for='score'>Choices</label>
+                <input type='text' name='choices'><br/>
 
-        <h2>Radio</h2>
-        <form method='POST' action='add-question.php'>
-            <?php
-            // $idq = get_nb_instances() + 1;
-            echo "<input type='hidden' name='idq'>";
-            ?>
-            <input type='hidden' name='typeq' value='radio'>
-            <label for='textq'>Question</label>
-            <input type='text' name='textq'><br/>
-            <label for='answer'>Answer</label>
-            <input type='text' name='answer'><br/>
-            <label for='score'>Score</label>
-            <input type='number' name='score' min="0" value="1"><br/>
-            <label for='score'>Choices</label>
-            <input type='text' name='choices'><br/>
+                <input type='submit' value='Ajouter' id='no'>
+            </form>
+        </div>
+        <script>
+            function showForm(formType) {
+                // Hide all forms
+                var forms = document.querySelectorAll('.question-form');
+                forms.forEach(function(form) {
+                    form.classList.remove('active');
+                });
 
-            <input type='submit' value='Ajouter'>
-        </form>
-
-        <h2>Checkbox</h2>
-        <form method='POST' action='add-question.php'>
-            <?php
-            // $idq = get_nb_instances() + 1;
-            echo "<input type='hidden' name='idq'>";
-            ?>
-            <input type='hidden' name='typeq' value='checkbox'>
-            <label for='textq'>Question</label>
-            <input type='text' name='textq'><br/>
-            <label for='answer'>Answer</label>
-            <input type='text' name='answer'><br/>
-            <label for='score'>Score</label>
-            <input type='number' name='score' min="0" value="1"><br/>
-            <label for='score'>Choices</label>
-            <input type='text' name='choices'><br/>
-
-            <input type='submit' value='Ajouter'>
-        </form>
+                // Show the selected form
+                var selectedForm = document.getElementById(formType + '-form');
+                selectedForm.classList.add('active');
+            }
+        </script>
         <?php
             if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $quest = $_POST;
