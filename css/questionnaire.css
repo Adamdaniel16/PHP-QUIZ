@@ -1,5 +1,9 @@
-p {
-    margin-left: 2em;
+p, label{
+    margin-right: 2em;
     margin-top: 2em;
-    font-size: larger;
+    font-size:larger;
+}
+
+body>p{
+    margin-left: 2em;
 }
