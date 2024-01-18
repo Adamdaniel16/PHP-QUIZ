@@ -260,7 +260,7 @@ $answer_handlers = array(
 
 
 function question_text($q) {
-    echo ($q->textq . "<br><input type='text' name='$q->idq'><br>");
+    echo ("<p>".$q->textq . "</p><br><input type='text' name='$q->idq'><br>");
 }
 
 function answer_text($q, $v) {
@@ -274,7 +274,7 @@ function answer_text($q, $v) {
 }
 
 function question_radio($q) {
-    $html = $q->textq . "<br>";
+    $html = "<p>".$q->textq . "</p><br>";
     $i = 0;
     foreach ($q->choices as $c) {
         $i += 1;
@@ -295,7 +295,7 @@ function answer_radio($q, $v) {
 }
 
 function question_checkbox($q) {
-    $html = $q->textq . "<br>";
+    $html = "<p>".$q->textq . "</p><br>";
     $i = 0;
     foreach ($q->choices as $c) {
         $i += 1;
