@@ -44,3 +44,16 @@ input:not(#no){
     width: 70%;
     padding: 5px;
 }
+
+th, td {
+    border: 1px solid;
+    padding: 5px;
+}
+
+table{
+    border-collapse: collapse;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 2em;
+    font-size: 20px;
+}

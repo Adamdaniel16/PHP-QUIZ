@@ -1,3 +1,4 @@
+<!-- Page l'affichage de toutes les questions -->
 <html>
     <head>
         <?php
@@ -9,8 +10,11 @@
             use Form\Type\QuestionRadio;
         ?>
             <title>All Question</title>
-            <link rel="stylesheet" href="css/all-question.css">
+            <link rel="stylesheet" href="css/add-question.css">
             <link rel="stylesheet" href="css/base.css">
+            <link rel="preconnect" href="https://fonts.googleapis.com">
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+            <link href="https://fonts.googleapis.com/css2?family=Questrial&display=swap" rel="stylesheet"> 
     </head>
     <body>
         <h1>EDIT A QUESTION</h1>
@@ -34,6 +38,7 @@
                 <td>$textq</td>
                 <td>$score</td>";
 
+                // vérif de type de question distinct
                 switch($typeq){
                     case 'text':
                         echo "<td></td>";
@@ -57,8 +62,6 @@
                 <td><a href='edit-question.php?idq=$idq'>editer</a></td>
                 <td><a href='delete-question.php?idq=$idq' onclick='return confirm(\"Are you sure you want to delete this question?\")'>supprimer</a></td>
                 </tr>";
-
-                // <td><a href='delete-question.php?idq=$idq' onclick='return confirm(\"Are you sure you want to delete this question?\")>supprimer</a></td>
             }
         ?>
         <form action='home.php'>

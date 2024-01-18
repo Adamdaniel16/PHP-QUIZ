@@ -1,3 +1,4 @@
+<!-- Page pour editer une question -->
 <html>
     <head>
         <?php
@@ -11,6 +12,9 @@
             <title>Edit Question</title>
             <link rel="stylesheet" href="css/edit-question.css">
             <link rel="stylesheet" href="css/base.css">
+            <link rel="preconnect" href="https://fonts.googleapis.com">
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+            <link href="https://fonts.googleapis.com/css2?family=Questrial&display=swap" rel="stylesheet"> 
     </head>
     <body>
         <h1>EDIT QUESTION</h1>
@@ -29,6 +33,7 @@
                 <label for='score'>Score</label>
                 <input type='number' name='score' min='0' value='$score'><br/>";
 
+                // vérifier le type des questions différents
                 switch($typeq){
                     case 'text':
                         $answer = $question->answer;
@@ -55,6 +60,7 @@
                 </form>";
             }
 
+            // pour mettre à jour la question
             if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $quest = $_POST;
                 switch($quest['typeq']){
@@ -75,4 +81,7 @@
                 header("Location: all-question.php");
             }
         ?>
+        <form action='all-question.php'>
+            <button type="submit">Go to Homepage</button>
+        </form>
     </body>

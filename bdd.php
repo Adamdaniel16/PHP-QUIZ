@@ -1,3 +1,4 @@
+<!-- Page pour charger la base de données -->
 <?php
 include_once 'functions.php';
 require_once 'Classes/autoloader.php';
@@ -41,6 +42,7 @@ try{
         new QuestionRadio(3, 'radio',"Quel est le symbole chimique de l'or ?",'Au',1,array('H2O','Gd','Au','Or')),
     );
 
+    // l'ajout des questions dans la bdd depuis un array des objets
     foreach($questions as $q){
         add_question($q);
     }
@@ -48,6 +50,8 @@ try{
     echo "Insertion en base réussie !";
 
     $file_db=null;
+    // redirection vers la page home
+    header("Location: home.php");
 
 }catch(PDOException $ex){
     echo $ex->getMessage();
