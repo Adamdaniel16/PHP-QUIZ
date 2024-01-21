@@ -15,6 +15,18 @@ abstract class Question {
         $this->textq = $textq;
         $this->score = $score;
     }
+
+    abstract public function display_question();
+
+    abstract public function display_answer($v);
+
+    abstract public function delete_question($file_db, $idq);
+
+    abstract public function edit_question($file_db);
+
+    abstract public function add_question($file_db);
+
+
 }
 
 ?>
