@@ -77,7 +77,9 @@
                         $objet = new QuestionCheckbox($quest['idq'], $quest['typeq'],$quest['textq'],$quest['answer'],$quest['score'],$quest['choices']);
                         break;
                 }
-                edit_question($objet);
+                // edit_question($objet);
+                $file_db = get_bd();
+                $objet->edit_question($file_db);
                 header("Location: all-question.php");
             }
         ?>

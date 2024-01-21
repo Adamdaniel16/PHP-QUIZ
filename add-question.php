@@ -38,7 +38,6 @@
             <h2>Text</h2>
             <form method='POST' action='add-question.php'>
                 <?php
-                    // $idq = get_nb_instances() + 1;
                     echo "<input type='hidden' name='idq'>";
                 ?>
                 <input type='hidden' name='typeq' value='text'>
@@ -58,7 +57,6 @@
             <h2>Radio</h2>
             <form method='POST' action='add-question.php'>
                 <?php
-                // $idq = get_nb_instances() + 1;
                 echo "<input type='hidden' name='idq'>";
                 ?>
                 <input type='hidden' name='typeq' value='radio'>
@@ -80,7 +78,6 @@
             <h2>Checkbox</h2>
             <form method='POST' action='add-question.php'>
                 <?php
-                // $idq = get_nb_instances() + 1;
                 echo "<input type='hidden' name='idq'>";
                 ?>
                 <input type='hidden' name='typeq' value='checkbox'>
@@ -128,7 +125,9 @@
                         $objet = new QuestionCheckbox($quest['idq'], $quest['typeq'],$quest['textq'],$quest['answer'],$quest['score'],$quest['choices']);
                         break;
                 }
-                add_question($objet);
+                // add_question($objet);
+                $file_db = get_bd();
+                $objet->add_question($file_db);
             }
         ?>
         <form action='home.php'>
